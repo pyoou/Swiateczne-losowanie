@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Panel organizatora{% endblock %}
+{% block content %}
+<section class="hero hero-small">
+  <h1 class="title">Panel organizatora 🎅</h1>
+  <p class="subtitle">Nie widzisz tu, kto kogo wylosował – Ty też możesz brać udział!</p>
+</section>
+
+{% if is_new %}
+<section class="card notice">
+  <h2>🎉 Losowanie utworzone!</h2>
+  <p><strong>Zapisz adres tej strony</strong> (np. dodaj do zakładek) – to Twój jedyny dostęp do panelu organizatora. Nie wysyłaj go nikomu.</p>
+  <div class="copy-row">
+    <input class="person-link" type="text" readonly value="{{ admin_url }}" aria-label="Adres panelu organizatora">
+    <button class="btn btn-ghost copy" type="button" data-copy="{{ admin_url }}">Kopiuj</button>
+  </div>
+</section>
+{% endif %}
+
+<section class="card">
+  <div class="admin-head">
+    <div>
+      <div class="big-number">{{ progress.done }} / {{ progress.total }}</div>
+      <div class="muted">osób już wylosowało</div>
+    </div>
+    <div class="right muted">
+      {% if is_open %}⏰ otwarte do {{ deadline | pl_datetime }}{% else %}🔒 zamknięte{% endif %}
+    </div>
+  </div>
+  <div class="progress"><div class="progress-bar" style="width: {{ progress.percent }}%"></div></div>
+</section>
+
+<section class="card">
+  <div class="admin-head">
+    <h2>Osobiste linki</h2>
+    <button class="btn btn-primary" id="copy-all" type="button">📋 Kopiuj wiadomość dla wszystkich</button>
+  </div>
+  <ul class="people">
+    {% for p in people %}
+    <li class="person {{ 'done' if p.done }}">
+      <span class="person-status" title="{{ 'Wylosował(a)' if p.done else 'Jeszcze nie losował(a)' }}">{{ '✅' if p.done else '⏳' }}</span>
+      <span class="person-name">
+        {{ p.name }}
+        {% if p.self_hit %}<span class="tag" title="Trafił(a) na siebie i użył(a) dodatkowej próby">🙈 powtórka</span>{% endif %}
+        {% if p.drawn_at %}<span class="muted small">{{ p.drawn_at | pl_datetime }}</span>{% endif %}
+      </span>
+      <input class="person-link" type="text" readonly value="{{ p.link }}" aria-label="Link dla {{ p.name }}">
+      <button class="btn btn-ghost copy" type="button" data-copy="{{ p.link }}">Kopiuj</button>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="card danger-zone">
+  <h2>Strefa zagrożenia</h2>
+  <p class="muted">Reset czyści wszystkie wyniki (linki zostają te same). Używaj tylko, jeśli coś poszło nie tak.</p>
+  <form method="post" action="{{ url_for('admin_reset', token=token) }}"
+        onsubmit="return confirm('Na pewno wyczyścić WSZYSTKIE wyniki losowania?');">
+    <button class="btn btn-danger" type="submit">🧨 Resetuj losowanie</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script id="people-data" type="application/json">{{ people | tojson }}</script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

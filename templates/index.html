@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-tree" aria-hidden="true">🎄</div>
+  <h1 class="title">Świąteczne Losowanie</h1>
+  <p class="subtitle">Kto komu kupuje prezent? Niech zdecyduje los ✨</p>
+
+  <div class="countdown">
+    {% if days_to_eve == 0 %}
+      <strong>Dziś Wigilia!</strong> 🌟
+    {% else %}
+      Do Wigilii zostało <strong>{{ days_to_eve }}</strong>
+      {{ "dzień" if days_to_eve == 1 else ("dni") }} 🎅
+    {% endif %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>Jak to działa?</h2>
+  <ol class="rules">
+    <li>
+      <span class="rule-icon">🔗</span>
+      <div><strong>Masz swój osobisty link</strong> – dostaniesz go od organizatora. Tylko Ty możesz nim losować.</div>
+    </li>
+    <li>
+      <span class="rule-icon">🎁</span>
+      <div><strong>Losujesz raz</strong> – wylosowana osoba znika z puli. Bez zamiany i bez kombinowania!</div>
+    </li>
+    <li>
+      <span class="rule-icon">🙈</span>
+      <div><strong>Trafisz na siebie?</strong> Dostajesz <em>jedną</em> dodatkową próbę – wtedy już na pewno nie wylosujesz siebie.</div>
+    </li>
+    <li>
+      <span class="rule-icon">🤫</span>
+      <div><strong>Cicho sza!</strong> Nikt poza Tobą nie wie, kogo wylosowałeś/aś.</div>
+    </li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2>Postęp losowania</h2>
+  <div class="progress" role="progressbar" aria-valuenow="{{ progress.done }}" aria-valuemin="0" aria-valuemax="{{ progress.total }}">
+    <div class="progress-bar" style="width: {{ progress.percent }}%"></div>
+  </div>
+  <p class="muted center">Wylosowało już <strong>{{ progress.done }}</strong> z <strong>{{ progress.total }}</strong> osób</p>
+  <p class="muted center">
+    {% if is_open %}
+      ⏰ Losowanie otwarte do: {{ deadline | pl_datetime }}
+    {% else %}
+      🔒 Losowanie zostało zamknięte.
+    {% endif %}
+  </p>
+</section>
+{% endblock %}

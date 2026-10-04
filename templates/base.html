@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Świąteczne Losowanie{% endblock %}</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <canvas id="snow" aria-hidden="true"></canvas>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <ul class="lights" aria-hidden="true">
+    {% for _ in range(40) %}<li></li>{% endfor %}
+  </ul>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <span>Wesołych Świąt! 🎄</span>
+    {% block footer_extra %}{% endblock %}
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/snow.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

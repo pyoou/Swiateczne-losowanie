@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Losowanie – {{ me.name }}{% endblock %}
+{% block content %}
+<section class="hero hero-small">
+  <h1 class="title">Cześć, {{ me.name }}! 👋</h1>
+  <p class="subtitle" id="lead">Gotowy/a? Kliknij prezent albo przycisk i zobacz, komu w tym roku robisz niespodziankę.</p>
+</section>
+
+<section class="stage card" id="stage">
+  <!-- 1. Prezent -->
+  <div class="gift-area" id="gift-area">
+    <button class="gift" id="gift" type="button" aria-label="Otwórz prezent i losuj">
+      <span class="gift-lid"><span class="bow bow-l"></span><span class="bow bow-r"></span></span>
+      <span class="gift-box"></span>
+    </button>
+    <button class="btn btn-primary btn-big" id="draw-btn" type="button">🎲 Losuj!</button>
+  </div>
+
+  <!-- 2. Bęben z imionami -->
+  <div class="reel" id="reel" hidden>
+    <div class="reel-window">
+      <span class="marker marker-l"></span><span class="marker marker-r"></span>
+      <ul class="reel-strip" id="reel-strip"></ul>
+    </div>
+    <p class="reel-caption">Losowanie trwa…</p>
+  </div>
+
+  <!-- 3a. Trafienie na siebie -->
+  <div class="self-hit" id="self-hit" hidden>
+    <div class="self-emoji" aria-hidden="true">🙈</div>
+    <h2>Los wskazał… Ciebie!</h2>
+    <p>Siebie raczej nie obdarujesz 😄 Masz <strong>jedną</strong> dodatkową próbę – tym razem na pewno trafisz na kogoś innego.</p>
+    <button class="btn btn-primary btn-big" id="redraw-btn" type="button">🔄 Losuj jeszcze raz</button>
+  </div>
+
+  <!-- 3b. Wynik -->
+  <div class="result" id="result" hidden>
+    <p class="result-label">🎁 W tym roku kupujesz prezent dla:</p>
+    <div class="result-card" id="result-card">
+      <span class="result-name" id="result-name"></span>
+    </div>
+    <p class="muted">Psst… zachowaj to w tajemnicy 🤫</p>
+    <button class="btn btn-ghost" id="hide-btn" type="button">🙈 Ukryj</button>
+  </div>
+
+  <!-- Zamknięte -->
+  <div class="closed" id="closed" hidden>
+    <div class="self-emoji" aria-hidden="true">🔒</div>
+    <h2>Losowanie zamknięte</h2>
+    <p>Niestety nie zdążyłeś/aś – skontaktuj się z organizatorem.</p>
+  </div>
+
+  <p class="error" id="error" role="alert" hidden></p>
+</section>
+
+<p class="muted center small">⏰ Losowanie otwarte do: {{ deadline | pl_datetime }}</p>
+{% endblock %}
+
+{% block footer_extra %}
+  <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true" title="Dźwięk">🔊</button>
+{% endblock %}
+
+{% block scripts %}
+<script id="draw-data" type="application/json">{{ data | tojson }}</script>
+<script src="{{ url_for('static', filename='js/sound.js') }}"></script>
+<script src="{{ url_for('static', filename='js/draw.js') }}"></script>
+{% endblock %}

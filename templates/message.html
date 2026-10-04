@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-tree" aria-hidden="true">{{ emoji }}</div>
+  <h1 class="title">{{ title }}</h1>
+  <p class="subtitle">{{ text }}</p>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+# Render Blueprint – wdrożenie jednym kliknięciem (darmowy plan).
+# Tworzy serwer aplikacji + darmową bazę Postgres (wyniki przetrwają uśpienie serwera).
+services:
+  - type: web
+    name: swiateczne-losowanie
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: waitress-serve --host=0.0.0.0 --port=$PORT --threads=8 app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SETUP_KEY          # hasło do strony /setup – Render poprosi o nie przy wdrożeniu
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: swiateczne-losowanie-db
+          property: connectionString
+
+databases:
+  - name: swiateczne-losowanie-db
+    plan: free
+    region: frankfurt
+    ipAllowList: []             # dostęp tylko z wnętrza Rendera

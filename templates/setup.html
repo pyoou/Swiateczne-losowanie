@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Przygotuj losowanie{% endblock %}
+{% block content %}
+<section class="hero hero-small">
+  <div class="hero-tree" aria-hidden="true">🎅</div>
+  <h1 class="title">Przygotuj losowanie</h1>
+  <p class="subtitle">Wpisz uczestników, a każdy dostanie swój osobisty link.</p>
+</section>
+
+<form class="card form" method="post" autocomplete="off">
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+
+  <label class="field">
+    <span>🔑 Hasło organizatora</span>
+    <input type="password" name="key" required autocomplete="current-password">
+    <small class="muted">To, które ustawiłeś/aś na hostingu jako <code>SETUP_KEY</code>.</small>
+  </label>
+
+  <label class="field">
+    <span>👨‍👩‍👧‍👦 Uczestnicy – jedna osoba w linii</span>
+    <textarea name="names" rows="8" required placeholder="Mama&#10;Tata&#10;Ania&#10;Kuba">{{ form.names }}</textarea>
+    <small class="muted">Imiona muszą być unikalne (np. „Ania K.” i „Ania W.”).</small>
+  </label>
+
+  <label class="field">
+    <span>⏰ Losowanie otwarte do</span>
+    <input type="datetime-local" name="deadline" value="{{ form.deadline }}" required>
+  </label>
+
+  {% if exists %}
+  <label class="field-check">
+    <input type="checkbox" name="overwrite" value="1">
+    <span>⚠️ Losowanie już istnieje – <strong>zacznij od nowa</strong> (stare linki i wyniki przepadną)</span>
+  </label>
+  {% endif %}
+
+  <button class="btn btn-primary btn-big" type="submit">🎄 Utwórz losowanie</button>
+</form>
+{% endblock %}
