@@ -1,12 +1,4 @@
 # Wpisz uczestników – jedna osoba w linii. Linie z # są pomijane.
 # Imiona muszą być unikalne (np. "Ania K." i "Ania W.").
-Monika
-Kamila
 Babcia
 Dziadek
-Kuba
-Karol
-Krzysztof
-Agata
-Łukasz
-Iwona
